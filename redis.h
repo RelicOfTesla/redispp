@@ -18,13 +18,13 @@ class Client {
 public:
 	Client();
 
-	static const long ERROR = -1;
-	static const long STRING = 1;
-	static const long LIST = 2;
-	static const long SET = 3;
-	static const long ZSET = 4;
-	static const long HASH = 5;
-	static const long NONE = 6;
+	static const RedisInteger ERROR_ = -1;
+	static const RedisInteger STRING = 1;
+	static const RedisInteger LIST = 2;
+	static const RedisInteger SET = 3;
+	static const RedisInteger ZSET = 4;
+	static const RedisInteger HASH = 5;
+	static const RedisInteger NONE = 6;
 
 	bool connect(std::string host = "127.0.0.1", short port = 6379);
 	

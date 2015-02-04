@@ -3,8 +3,22 @@
 #include <iostream>
 
 #include <sys/types.h>          /* See NOTES */
+#if _WIN32 || _WIN64
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+int write(int fd, const void* data, size_t len)
+{
+	return send(fd, (char*)data, len, 0);
+}
+int read(int fd, void* data, size_t len)
+{
+	return recv(fd, (char*)data, len, 0);
+}
+#define atoll _atoi64
+#else
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#endif
 #include <string.h>
 #include <cstdlib>
 
@@ -12,6 +26,7 @@ using namespace std;
 
 namespace redis {
 Client::Client() :
+	m_fd(-1),
 	m_multi(false),
 	m_pipeline(false) {
 }
@@ -19,7 +34,7 @@ Client::Client() :
 bool 
 Client::connect(std::string host, short port) {
 	int fd = socket(AF_INET, SOCK_STREAM, 0);
-	if(!fd) {
+	if(!fd || fd==-1) {
 		return false;
 	}
 	struct sockaddr_in addr;
@@ -259,7 +274,7 @@ Client::read_integer() {
 	std::string str = getline();
 	if(str[0] == ':') {
 		ret.type(REDIS_LONG);
-		ret.set(::atol(&str[1]));
+		ret.set(::atoll(&str[1]));
 	}
 	return ret;
 }

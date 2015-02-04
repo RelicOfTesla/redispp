@@ -6,7 +6,7 @@ namespace redis {
 
 Response::Response(RedisResponseType t) :
 	m_type(t),
-	m_long(0),
+	m_integer(0),
 	m_bool(false)
 {
 
@@ -26,12 +26,12 @@ Response::set<Buffer>(Buffer s) {
 
 template <>
 bool
-Response::set<long>(long l) {
+Response::set<RedisInteger>(RedisInteger l) {
 	if(m_type != REDIS_LONG) {
 		return false;
 	}
 
-	m_long = l;
+	m_integer = l;
 	return true;
 }
 
@@ -116,9 +116,16 @@ Response::size() const {
 
 // getters
 template <>
-long Response::get<long>() const {
-	return m_long;
+RedisInteger Response::get<RedisInteger>() const {
+	return m_integer;
 }
+
+#if 1
+template <>
+long Response::get<long>() const {
+	return m_integer;
+}
+#endif
 
 template <>
 const char* Response::get<const char *>() const {

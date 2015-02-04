@@ -32,7 +32,7 @@ private:
 	RedisResponseType m_type;
 
 	// embeded values
-	long m_long;
+	RedisInteger m_integer;
 	bool m_bool;
 	double m_double;
 	Buffer m_str;

@@ -6,11 +6,12 @@
 #include <map>
 #include <string>
 #include <vector>
-
+#include <cstdint>
 
 namespace redis {
 
 typedef std::map<Buffer, Buffer> RedisMap;
+typedef std::int64_t RedisInteger;
 
 class Command {
 
